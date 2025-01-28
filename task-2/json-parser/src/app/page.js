@@ -1,16 +1,12 @@
-
-
-import Image from "next/image";
-import styles from "./page.module.scss";
-import InputJson from "./components/InputJson";
-import DisplayJson from "./components/DisplayJson";
+import InputJsonComponent from "./components/InputJson";
+import DisplayJsonComponent from "./components/DisplayJson";
 
 export default function Home() {
   return (
-      <main className="container">
-        <InputJson />
-        <DisplayJson />
-      </main>
+      <div className="container">
+        <InputJsonComponent />
+        <DisplayJsonComponent />
+      </div>
     
   );
 }
