@@ -1,0 +1,173 @@
+html{
+    background-color: rgb(18, 95, 146);
+    color: #f1eeee;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    overflow: hidden;
+}
+
+body {
+   width: 100%;
+    border-style: double; 
+    color: black;
+    vertical-align: middle;
+    align-items: center;
+    padding-bottom: 10px; 
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: url('./background3.jpg');
+    background-size: cover;  /* Ensures the image covers the whole screen */
+    background-position: center;  /* Centers the image */
+    background-repeat: no-repeat;  /* Prevents the image from repeating */
+    height: 100vh;  /* Makes sure the body covers the entire viewport height */
+    margin: 0;  
+}
+   
+
+
+  #quiz-container {
+    width: 90%;
+    max-width: 600px;
+    border-radius: 10px;
+
+  }
+  
+  #progress-section {
+    position: relative;
+    margin-bottom: 20px;
+  }
+  
+  #progress-bar-container {
+    position:relative;
+    width: 100%;
+    height: 10px;
+    background: #e0e0e0;
+    border-radius: 20px;
+    
+  }
+  
+  #progress-bar {
+    height: 100%;
+    width: 0;
+     /* background: linear-gradient(90deg, #3e41cf, #3b54c4);  */
+    transition: width 0.5s ease;
+  }
+  
+  #breakpoints {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    transform: translateY(-50%);
+    display: flex;
+    gap: 5.2%;
+  }
+  
+  .breakpoint {
+    position: relative;
+    width: 25px;
+    height: 25px;
+    background: #ffffff; 
+    border: 2px solid #e0e0e0; 
+    border-radius: 50%;
+    z-index: 1;
+  }
+
+
+  .option-btn{
+    padding: 10px 20px;
+    border: rgb(139, 138, 138);
+    background: white;
+    border-radius: 5px;
+    color: black;
+    border-style: solid;
+    cursor: pointer;
+  }
+
+  
+  .breakpoint.active.correct {
+    background-color: #e0e0e0;
+    content: url(./checkmark.svg);
+  }
+  
+  .breakpoint.active.incorrect {
+    content: url(./cross.svg);
+ 
+  }
+  
+  #progress-image {
+    position: absolute;
+     top: -10px; 
+    justify-self: auto;
+    size: 2px;
+    left: 0;
+    transition: left 1s ease;
+    z-index: 2;
+    width: 30px;
+    border-radius: 50%
+  }
+
+  #question-container{
+    justify-content: center;
+    flex-direction: column;
+    padding: 10px;
+  }
+  
+  #question-container h2 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    
+  }
+  
+  #options {
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+    font-weight:bolder;
+    font-size: large;
+
+  }
+
+  
+  #navigation {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  
+  button {
+    padding: 10px 20px;
+    border: none;
+    background: rgb(0, 89, 255);
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+
+
+  button:disabled {
+    display: hidden;
+    cursor: not-allowed;
+  }
+
+  @media only screen and (max-width: 600px) {
+    body {
+      background-color: lightblue;
+    }
+
+    .breakpoint{
+      width: 15px;
+      height: 15px;
+    }
+
+    #progress-image{
+      top: -5px;
+      width: 20px;
+    }
+
+  }
