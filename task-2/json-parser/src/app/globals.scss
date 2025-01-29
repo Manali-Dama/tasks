@@ -66,6 +66,10 @@ pre {
   color: #33691e;
   border-radius: 4px;
   font-size: 0.9rem;
+  word-wrap: break-word;
+  white-space: pre-wrap; 
+  word-wrap: break-word;  
+  overflow-wrap: break-word;
 }
 
 .error {
