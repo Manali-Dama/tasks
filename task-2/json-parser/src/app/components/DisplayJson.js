@@ -10,7 +10,6 @@ const JsonToggle = ({ data, level = 0 }) => {
   const toggle = () => setIsOpen(!isOpen);
 
   if (typeof data !== 'object' || data === null) {
-    // If data is a string, remove the quotes for display
     return <span>{typeof data === 'string' ? data.replace(/\"/g, '') : data}</span>;
   }
 
@@ -27,13 +26,13 @@ const JsonToggle = ({ data, level = 0 }) => {
         <div>
           {isArray
             ? data.map((item, index) => (
-                <div key={index}>
+                <div key={index} className='json-key'>
                   <JsonToggle data={item} level={level + 1} />
                 </div>
               ))
             : keys.map((key) => (
-                <div key={key}>
-                  <strong>{key}:</strong>
+                <div key={key} >
+                  <strong className='json-key'>{key}:</strong>
                   <JsonToggle data={data[key]} level={level + 1} />
                 </div>
               ))}
@@ -45,7 +44,7 @@ const JsonToggle = ({ data, level = 0 }) => {
 };
 
 const DisplayJsonComponent = () => {
-
+  
   const { parsedJson = null, error = null } = useSelector((state) => state.json);
 
   return (
