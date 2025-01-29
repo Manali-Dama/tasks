@@ -16,6 +16,7 @@ body {
 
 .input-json,
 .display-json {
+  overflow-x: hidden;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -25,6 +26,7 @@ body {
   background-color: #ffffff; // White background for contrast
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   height: 100%; // Occupy full height of the container
+  word-wrap: break-word;
 }
 
 textarea {
@@ -47,6 +49,7 @@ button {
   background-color: #1976d2; // Primary color
   color: #ffffff;
   border: none;
+  align-self: end;
   border-radius: 4px;
   width: fit-content;
   font-size: 1rem;
@@ -76,6 +79,7 @@ pre {
   color: #143306;
   font-weight: bold;
 }
+
 .copy-btn{
   position: 'absolute'; 
   top: 10; 
@@ -87,6 +91,7 @@ pre {
   border-radius: '5px';
   cursor: 'pointer';
 }
+
 .error {
   color: #d32f2f; // Red for errors
   font-weight: bold;
