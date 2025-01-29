@@ -45,7 +45,7 @@ const JsonToggle = ({ data, level = 0 }) => {
 };
 
 const DisplayJsonComponent = () => {
-  // Add default values to prevent destructuring errors
+
   const { parsedJson = null, error = null } = useSelector((state) => state.json);
 
   return (
