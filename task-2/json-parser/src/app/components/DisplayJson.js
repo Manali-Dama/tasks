@@ -5,24 +5,24 @@ import { useState } from 'react';
 
 // Recursive component to handle the toggle of JSON objects and arrays
 const JsonToggle = ({ data, level = 0 }) => {
-  const [isOpen, setIsOpen] = useState(true); // Initially open the brackets
-
+  const [isOpen, setIsOpen] = useState(false); 
 
   const toggle = () => setIsOpen(!isOpen);
 
   if (typeof data !== 'object' || data === null) {
-    return <span>{JSON.stringify(data)}</span>;
+    // If data is a string, remove the quotes for display
+    return <span>{typeof data === 'string' ? data.replace(/\"/g, '') : data}</span>;
   }
 
   const isArray = Array.isArray(data);
   const keys = isArray ? data.map((_, index) => index) : Object.keys(data);
 
   return (
-    <div style={{ marginLeft: `${level * 20}px` }}>
+    <div style={{ marginLeft: `${level * 15}px` }}>
       <span onClick={toggle} style={{ cursor: 'pointer', color: 'blue' }}>
         {isOpen ? '[-]' : '[+]'}
       </span>
-      <span>{isArray ? '[' : '{'}</span> {/* Display opening bracket */}
+      <span>{isArray ? '[' : ''}</span> {/* Display opening bracket */}
       {isOpen && (
         <div>
           {isArray
@@ -39,7 +39,7 @@ const JsonToggle = ({ data, level = 0 }) => {
               ))}
         </div>
       )}
-      {isOpen && <span>{isArray ? ']' : '}'}</span>} {/* Display closing bracket */}
+      {isOpen && <span>{isArray ? ']' : ''}</span>} {/* Display closing bracket */}
     </div>
   );
 };
