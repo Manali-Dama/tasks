@@ -5,7 +5,7 @@ import { useState } from 'react';
 
 // Recursive component to handle the toggle of JSON objects and arrays
 const JsonToggle = ({ data, level = 0 }) => {
-  const [isOpen, setIsOpen] = useState(false); 
+  const [isOpen, setIsOpen] = useState(false);
 
   const toggle = () => setIsOpen(!isOpen);
 
@@ -19,7 +19,7 @@ const JsonToggle = ({ data, level = 0 }) => {
   return (
     <div style={{ marginLeft: `${level * 15}px` }}>
       <span onClick={toggle} style={{ cursor: 'pointer', color: 'blue' }}>
-        {isOpen ? '[-]' : '[+]'}
+        {isArray && !isOpen ? `${data.length}` : isOpen ? '[-]' : '[+]'}
       </span>
       <span>{isArray ? '[' : ''}</span> {/* Display opening bracket */}
       {isOpen && (
@@ -31,7 +31,7 @@ const JsonToggle = ({ data, level = 0 }) => {
                 </div>
               ))
             : keys.map((key) => (
-                <div key={key} >
+                <div key={key}>
                   <strong className='json-key'>{key}:</strong>
                   <JsonToggle data={data[key]} level={level + 1} />
                 </div>
@@ -44,11 +44,24 @@ const JsonToggle = ({ data, level = 0 }) => {
 };
 
 const DisplayJsonComponent = () => {
-  
   const { parsedJson = null, error = null } = useSelector((state) => state.json);
 
+  // copy JSON to clipboard
+  const copyToClipboard = () => {
+    if (parsedJson) {
+       const jsonString = JSON.stringify(parsedJson, null, 2); // stringify with indentation
+      navigator.clipboard.writeText(jsonString).then(() => {
+        alert('JSON copied to clipboard!');
+      }).catch((err) => {
+        console.error('Error copying to clipboard: ', err);
+      });
+    }
+  };
+
   return (
-    <div className="display-json">
+    <div className="display-json" > 
+     
+
       {error ? (
         <p className="error">{error}</p>
       ) : (
@@ -60,6 +73,12 @@ const DisplayJsonComponent = () => {
           )}
         </pre>
       )}
+       <button 
+        onClick={copyToClipboard} 
+        className='copy-btn'
+      >
+        Copy JSON
+      </button>
     </div>
   );
 };
