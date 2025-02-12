@@ -12,71 +12,129 @@ import Button from "@/app/components/Button";
 import {useRouter} from "next/navigation";
 import productData from "@/data/productData"; // Import headers from JSON file
 
+// const ProductMaster = () => {
+//   const dispatch = useDispatch();
+//   const { products, loading, error, current_page, last_page } = useSelector(
+//     (state) => state.products
+//   );
+
+//   const router=useRouter();
+
+//   const [filters, setFilters] = useState({
+//     isAssured: "",
+//     isRefrigerated: "",
+//     status: "",
+//     combinations: "",
+//     manufacturer: "",
+//   });
+
+//   const abortControllerRef = useRef(null);
+
+//   useEffect(() => { 
+//     dispatch(fetchProductsStart({ page: current_page }));
+//   }, [dispatch, current_page]);
+
+//   const nextPage = () => {
+//     if (current_page < last_page) {
+//       dispatch(fetchProductsStart({ page: current_page + 1 }));
+//     }
+//   };
+
+//   const prevPage = () => {
+//     if (current_page > 1) {
+//       dispatch(fetchProductsStart({ page: current_page - 1 }));
+//     }
+//   };
+
+//   const handleFilterChange = (newFilters) => {
+//     setFilters(newFilters); 
+//     fetchFilteredProducts(newFilters);
+//   };
+
+//   const fetchFilteredProducts = (newFilters) => {
+//     if (abortControllerRef.current) {
+//       abortControllerRef.current.abort();
+//     }
+
+//     const controller = new AbortController();
+//     abortControllerRef.current = controller;
+
+//     let query = "";
+//     Object.keys(newFilters).forEach(key => {
+//       if (newFilters[key]) {
+//         query += `&${key}=${encodeURIComponent(newFilters[key])}`;
+//       }
+//     });
+
+//     api.get(`/master/products/unpublished?${query}`, { signal: controller.signal })
+//       .then((response) => {
+//         dispatch(fetchProductsStart({ 
+//           products: response.data.products,
+//           current_page: response.data.meta.current_page,
+//           last_page: response.data.meta.last_page,
+//         }));
+//       })
+//       .catch((error) => {
+//         console.error("Error fetching filtered products:", error);
+//       });
+//   };
+
+//   if (loading) return <p>Loading...</p>;
+//   if (error) return <p>Error: {error}</p>;
+
+//   return (
+//     <>
+//     <div className="flex justify-between">
+//       <Breadcrumbs paths={[{ name: "Home", link: "/" }, { name: "Product Master" }]} />
+//       <Button
+//   onClick={() => {
+//     router.push("/product-master/add-product");
+//   }}
+// >
+//   + Add
+// </Button>
+// </div>
+//       <div className="py-3">
+//         <div className="bg-white mt-3">
+//           <h1>Unpublished Products</h1>
+//           <Filter onFilterChange={handleFilterChange} />
+//           <Table headers={productData.headers} data={products} variant="products" />
+//           <div className="pagination">
+//             <button onClick={prevPage} disabled={current_page === 1}>Previous</button>
+//             <span>Page {current_page} of {last_page}</span>
+//             <button onClick={nextPage} disabled={current_page >= last_page}>Next</button>
+//           </div>
+//         </div>
+//       </div>
+//     </>
+//   );
+// };
 const ProductMaster = () => {
   const dispatch = useDispatch();
-  const { products, loading, error, current_page, last_page } = useSelector(
+  const { products, loading, error, current_page, last_page, filters } = useSelector(
     (state) => state.products
   );
 
-  const router=useRouter();
+  const router = useRouter();
 
-  const [filters, setFilters] = useState({
-    isAssured: "",
-    isRefrigerated: "",
-    status: "",
-    combinations: "",
-    manufacturer: "",
-  });
+  useEffect(() => {
+    dispatch(fetchProductsStart({ page: current_page, filters }));
+  }, [dispatch, current_page, filters]);
 
-  const abortControllerRef = useRef(null);
-
-  useEffect(() => { 
-    dispatch(fetchProductsStart({ page: current_page }));
-  }, [dispatch, current_page]);
+  const handleFilterChange = (newFilters) => {
+    dispatch(fetchProductsStart({ page: 1, filters: newFilters })); // Reset to page 1 when filters change
+  };
 
   const nextPage = () => {
     if (current_page < last_page) {
-      dispatch(fetchProductsStart({ page: current_page + 1 }));
+      dispatch(fetchProductsStart({ page: current_page + 1, filters }));
     }
   };
 
   const prevPage = () => {
     if (current_page > 1) {
-      dispatch(fetchProductsStart({ page: current_page - 1 }));
+      dispatch(fetchProductsStart({ page: current_page - 1, filters }));
     }
-  };
-
-  const handleFilterChange = (newFilters) => {
-    setFilters(newFilters); 
-    fetchFilteredProducts(newFilters);
-  };
-
-  const fetchFilteredProducts = (newFilters) => {
-    if (abortControllerRef.current) {
-      abortControllerRef.current.abort();
-    }
-
-    const controller = new AbortController();
-    abortControllerRef.current = controller;
-
-    let query = "";
-    Object.keys(newFilters).forEach(key => {
-      if (newFilters[key]) {
-        query += `&${key}=${encodeURIComponent(newFilters[key])}`;
-      }
-    });
-
-    api.get(`/master/products/unpublished?${query}`, { signal: controller.signal })
-      .then((response) => {
-        dispatch(fetchProductsStart({ 
-          products: response.data.products,
-          current_page: response.data.meta.current_page,
-          last_page: response.data.meta.last_page,
-        }));
-      })
-      .catch((error) => {
-        console.error("Error fetching filtered products:", error);
-      });
   };
 
   if (loading) return <p>Loading...</p>;
@@ -84,16 +142,10 @@ const ProductMaster = () => {
 
   return (
     <>
-    <div className="flex justify-between">
-      <Breadcrumbs paths={[{ name: "Home", link: "/" }, { name: "Product Master" }]} />
-      <Button
-  onClick={() => {
-    router.push("/product-master/add-product");
-  }}
->
-  + Add
-</Button>
-</div>
+      <div className="flex justify-between">
+        <Breadcrumbs paths={[{ name: "Home", link: "/" }, { name: "Product Master" }]} />
+        <Button onClick={() => router.push("/product-master/add-product")}>+ Add</Button>
+      </div>
       <div className="py-3">
         <div className="bg-white mt-3">
           <h1>Unpublished Products</h1>
@@ -109,6 +161,7 @@ const ProductMaster = () => {
     </>
   );
 };
+
 
 export default ProductMaster;
 
