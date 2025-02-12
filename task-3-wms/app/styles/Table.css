@@ -1,0 +1,85 @@
+/* Table Container */
+.table-container {
+    overflow: auto;
+    border-radius: 0.25rem;
+    box-shadow: 0 0 10px 0 rgba(183, 192, 206, 0.2);
+    background-color: #fff;
+    padding: 1rem;
+}
+
+/* Base Table Styling */
+.custom-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+    text-align: left;
+}
+
+.custom-table th,
+.custom-table td {
+    padding: 12px;
+    border: 1px solid #f2f4f9;
+    text-align: left;
+}
+
+/* Default Table Variant */
+.custom-table.default th {
+    background-color: #e9ecef;
+    color: #202223;
+}
+
+/* Striped Table Variant */
+.custom-table.striped tbody tr:nth-child(odd) {
+    background-color: #f8f9fa;
+}
+
+/* Bordered Table Variant */
+.custom-table.bordered th,
+.custom-table.bordered td {
+    border: 2px solid #202223;
+}
+
+/* Product Table Variant */
+.custom-table.products {
+    border-radius: 0.25rem;
+    box-shadow: 0 0 10px 0 rgba(183, 192, 206, 0.2);
+    background-color: #fff;
+}
+
+.custom-table.products th {
+    background-color: #ebeef0;;
+    color: #020202;
+    font-weight: bold;
+}
+
+.custom-table.products tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+/* Pagination Controls */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.pagination button {
+    background-color: #5556a6;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.pagination button:disabled {
+    background-color: #aeb7c5;
+    cursor: not-allowed;
+}
+
+.pagination button:hover:not(:disabled) {
+    background-color: #6610f2;
+}
