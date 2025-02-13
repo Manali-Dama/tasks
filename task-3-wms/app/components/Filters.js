@@ -1,172 +1,20 @@
 import { useEffect, useState } from "react";
-import api from "@/utils/axiosInstance"; // Import the custom axios instance
+import Select from "react-select";
+import api from "@/utils/axiosInstance";
 
-// const Filter = ({ onFilterChange }) => {
-//   const [filters, setFilters] = useState({
-//     isAssured: "",
-//     isRefrigerated: "",
-//     status: "",
-//     manufacturer: "",
-//     combination: "",
-//   });
-
-//   const [molecules, setMolecules] = useState([]);
-//   const [manufacturers, setManufacturers] = useState([]);
-//   const [products, setProducts] = useState([]);
-//   const [page, setPage] = useState(1);
-//   const [totalPages, setTotalPages] = useState(1); // Track total pages
-
-//   // Fetch molecules and manufacturers on component mount
-//   useEffect(() => {
-//     const fetchMolecules = async () => {
-//       try {
-//         const response = await api.get("/master/molecules");
-//         if (response.data && Array.isArray(response.data.molecules)) {
-//           setMolecules(response.data.molecules);
-//         } else {
-//           console.error("Unexpected response format for molecules:", response);
-//         }
-//       } catch (error) {
-//         console.error("Error fetching molecules:", error);
-//       }
-//     };
-
-//     const fetchManufacturers = async () => {
-//       try {
-//         const response = await api.get("/master/manufacturers");
-//         if (response.data && Array.isArray(response.data.manufacturers)) {
-//           setManufacturers(response.data.manufacturers);
-//         } else {
-//           console.error("Unexpected response format for manufacturers:", response);
-//         }
-//       } catch (error) {
-//         console.error("Error fetching manufacturers:", error);
-//       }
-//     };
-
-//     fetchMolecules();
-//     fetchManufacturers();
-//   }, []);
-
-//   // Function to fetch filtered products with pagination
-//   const fetchFilteredProducts = async (updatedFilters, newPage = 1) => {
-//     let url = "/master/products/unpublished";
-//     const params = new URLSearchParams();
-
-//     if (updatedFilters.isAssured) params.append("is_assured", updatedFilters.isAssured);
-//     if (updatedFilters.isRefrigerated) params.append("is_refrigerated", updatedFilters.isRefrigerated);
-//     if (updatedFilters.status) params.append("publish_status", updatedFilters.status);
-//     if (updatedFilters.manufacturer) params.append("manufacturer", updatedFilters.manufacturer);
-//     if (updatedFilters.combination) params.append("combination", updatedFilters.combination);
-
-//     params.append("sort_by", "created,d");
-//     params.append("page", newPage);
-
-//     try {
-//       const response = await api.get(`${url}?${params.toString()}`);
-//       setProducts(response.data.products || []);
-//       setTotalPages(response.data.total_pages || 1);
-//       setPage(newPage);
-//     } catch (error) {
-//       console.error("Error fetching filtered products:", error);
-//     }
-//   };
-
-//   // Handle filter changes
-//   const handleFilterChange = (e) => {
-//     const { name, value } = e.target;
-//     const newFilters = { ...filters, [name]: value };
-//     setFilters(newFilters);
-//     onFilterChange(newFilters);
-//     fetchFilteredProducts(newFilters, 1); // Reset to page 1 on filter change
-//   };
-
-//   // Handle pagination
-//   const handlePageChange = (newPage) => {
-//     fetchFilteredProducts(filters, newPage);
-//   };
-
-//   return (
-//     <div className="filter-container">
-//       {/* Filter Dropdowns */}
-//       <select name="isAssured" onChange={handleFilterChange} value={filters.isAssured}>
-//         <option value="">Is Assured</option>
-//         <option value="Yes">Yes</option>
-//         <option value="No">No</option>
-//       </select>
-//       <select name="isRefrigerated" onChange={handleFilterChange} value={filters.isRefrigerated}>
-//         <option value="">Is Refrigerated</option>
-//         <option value="Yes">Yes</option>
-//         <option value="No">No</option>
-//       </select>
-//       <select name="status" onChange={handleFilterChange} value={filters.status}>
-//         <option value="">Status</option>
-//         <option value="unpublished">Unpublished</option>
-//         <option value="draft">Draft</option>
-//         <option value="published">Published</option>
-//       </select>
-//       <select name="manufacturer" onChange={handleFilterChange} value={filters.manufacturer}>
-//         <option value="">Manufacturer</option>
-//         {manufacturers.map((manufacturer, idx) => (
-//           <option key={idx} value={manufacturer.id}>{manufacturer.name}</option>
-//         ))}
-//       </select>
-//       <select name="combination" onChange={handleFilterChange} value={filters.combination}>
-//         <option value="">Combination</option>
-//         {molecules.map((molecule, idx) => (
-//           <option key={idx} value={molecule.id}>{molecule.name}</option>
-//         ))}
-//       </select>
-
-//       {/* Product List */}
-//       <div className="product-list">
-//         {products.length > 0 ? (
-//           products.map((product) => (
-//             <div key={product.id} className="product-item">
-//               <h3>{product.name}</h3>
-//               <p>Status: {product.status}</p>
-//             </div>
-//           ))
-//         ) : (
-//           <p>No products found.</p>
-//         )}
-//       </div>
-
-//       {/* Pagination Controls */}
-//       <div className="pagination">
-//         <button disabled={page === 1} onClick={() => handlePageChange(page - 1)}>
-//           Previous
-//         </button>
-//         <span>Page {page} of {totalPages}</span>
-//         <button disabled={page === totalPages} onClick={() => handlePageChange(page + 1)}>
-//           Next
-//         </button>
-//       </div>
-//     </div>
-//   );
-// };
 const Filter = ({ onFilterChange }) => {
   const [filters, setFilters] = useState({
     isAssured: "",
     isRefrigerated: "",
-    status: "",
+    publish_status: "",
     manufacturer: "",
-    combination: "",
+    combination: [], // ✅ Fixed key name
   });
 
-  const [molecules, setMolecules] = useState([]);
   const [manufacturers, setManufacturers] = useState([]);
+  const [molecules, setMolecules] = useState([]);
 
   useEffect(() => {
-    const fetchMolecules = async () => {
-      try {
-        const response = await api.get("/master/molecules");
-        setMolecules(response.data.molecules || []);
-      } catch (error) {
-        console.error("Error fetching molecules:", error);
-      }
-    };
-
     const fetchManufacturers = async () => {
       try {
         const response = await api.get("/master/manufacturers");
@@ -176,153 +24,296 @@ const Filter = ({ onFilterChange }) => {
       }
     };
 
-    fetchMolecules();
+    const fetchMolecules = async () => {
+      try {
+        const response = await api.get("/master/molecules");
+        setMolecules(response.data.molecules || []);
+      } catch (error) {
+        console.error("Error fetching molecules:", error);
+      }
+    };
+
     fetchManufacturers();
+    fetchMolecules();
   }, []);
 
-  const handleFilterChange = (e) => {
-    const { name, value } = e.target;
+  // ✅ Handles both single and multi-select changes
+  const handleFilterChange = (name, value) => {
     const newFilters = { ...filters, [name]: value };
     setFilters(newFilters);
-    onFilterChange(newFilters); // Trigger Redux update
+    onFilterChange(newFilters);
+  };
+
+  // ✅ Clears an individual filter
+  const clearFilter = (name) => {
+    const newFilters = { ...filters, [name]: name === "combination" ? [] : "" };
+    setFilters(newFilters);
+    onFilterChange(newFilters);
+  };
+
+  // ✅ Clears all filters at once
+  const clearAllFilters = () => {
+    const resetFilters = {
+      isAssured: "",
+      isRefrigerated: "",
+      publish_status: "",
+      manufacturer: "",
+      combination: [],
+    };
+    setFilters(resetFilters);
+    onFilterChange(resetFilters);
   };
 
   return (
     <div className="filter-container">
-      <select name="isAssured" onChange={handleFilterChange} value={filters.isAssured}>
-        <option value="">Is Assured</option>
-        <option value="Yes">Yes</option>
-        <option value="No">No</option>
-      </select>
-      <select name="publish_status" onChange={handleFilterChange} value={filters.status}>
-        <option value="">Status</option>
-        <option value="Unpublished">Unpublished</option>
-        <option value="Draft">Draft</option>
-        <option value="Published">Published</option>
-      </select>
-      <select name="manufacturer" onChange={handleFilterChange} value={filters.manufacturer}>
-        <option value="">Manufacturer</option>
-        {manufacturers.map((m) => (
-          <option key={m.id} value={m.id}>{m.name}</option>
-        ))}
-      </select>
+      {/* ✅ Display Active Filters with Clear Buttons */}
+      <div className="selected-filters">
+        {filters.isAssured && (
+          <span className="filter-tag">
+            Is Assured: {filters.isAssured}
+            <button onClick={() => clearFilter("isAssured")} className="clear-btn">✖</button>
+          </span>
+        )}
+        {filters.publish_status && (
+          <span className="filter-tag">
+            Status: {filters.publish_status}
+            <button onClick={() => clearFilter("publish_status")} className="clear-btn">✖</button>
+          </span>
+        )}
+        {filters.manufacturer && (
+          <span className="filter-tag">
+            Manufacturer: {manufacturers.find((m) => m.id === filters.manufacturer)?.name || filters.manufacturer}
+            <button onClick={() => clearFilter("manufacturer")} className="clear-btn">✖</button>
+          </span>
+        )}
+        {filters.combination.length > 0 && (
+          <span className="filter-tag">
+            Molecules: {filters.combination.map((id) => molecules.find((m) => m.id === id)?.name).join(", ")}
+            <button onClick={() => clearFilter("combination")} className="clear-btn">✖</button>
+          </span>
+        )}
+      </div>
+
+      {/* ✅ Filter Select Inputs */}
+      <div className="filters">
+        {/* Is Assured Dropdown */}
+        <select
+          name="isAssured"
+          onChange={(e) => handleFilterChange(e.target.name, e.target.value)}
+          value={filters.isAssured}
+        >
+          <option value="">Is Assured</option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </select>
+
+        {/* Status Filter */}
+        <select
+          name="publish_status"
+          onChange={(e) => handleFilterChange(e.target.name, e.target.value)}
+          value={filters.publish_status}
+        >
+          <option value="">Status</option>
+          <option value="Unpublished">Unpublished</option>
+          <option value="Draft">Draft</option>
+          <option value="Published">Published</option>
+        </select>
+
+        {/* ✅ Manufacturer Dropdown */}
+        <Select
+          options={manufacturers.map((m) => ({ value: m.id, label: m.name }))}
+          onChange={(selectedOption) =>
+            handleFilterChange("manufacturer", selectedOption ? selectedOption.value : "")
+          }
+          isSearchable
+          value={manufacturers.find((m) => m.id === filters.manufacturer)
+            ? { value: filters.manufacturer, label: manufacturers.find((m) => m.id === filters.manufacturer)?.name }
+            : null}
+          placeholder="Select Manufacturer"
+        />
+
+        {/* ✅ Multi-Select Molecule Dropdown */}
+        <Select
+          options={molecules.map((m) => ({ value: m.id, label: m.name }))}
+          onChange={(selectedOptions) =>
+            handleFilterChange("combination", selectedOptions.map((option) => option.value))
+          }
+          isMulti
+          isSearchable
+          value={molecules
+            .filter((m) => filters.combination.includes(m.id))
+            .map((m) => ({
+              value: m.id,
+              label: m.name,
+            }))}
+          placeholder="Select Molecules"
+        />
+      </div>
+
+      {/* ✅ Clear All Filters Button */}
+      <button onClick={clearAllFilters} className="clear-all-btn">Clear All Filters</button>
+
+      {/* ✅ Styles (Add to your CSS or Tailwind) */}
     </div>
   );
 };
-
 
 export default Filter;
 
 
 
+
 // import { useEffect, useState } from "react";
-// import api from "@/utils/axiosInstance"; // Import the custom axios instance
+// import Select from "react-select";
+// import api from "@/utils/axiosInstance";
 
 // const Filter = ({ onFilterChange }) => {
 //   const [filters, setFilters] = useState({
 //     isAssured: "",
-//     isRefrigerated: "",
+//     isRefrigerated:"",
 //     status: "",
 //     manufacturer: "",
-//     combination: "",
+//     combinatoion:"",
 //   });
 
-//   const [molecules, setMolecules] = useState([]);
 //   const [manufacturers, setManufacturers] = useState([]);
+//   const [molecules, setMolecules] = useState([]);
 
-//   // Fetch molecules and manufacturers on component mount
 //   useEffect(() => {
-//     const fetchMolecules = async () => {
-//       try {
-//         const response = await api.get('/master/molecules');
-//         if (response.data && Array.isArray(response.data.molecules)) {
-//           setMolecules(response.data.molecules);
-//         } else {
-//           console.error("Unexpected response format for molecules:", response);
-//         }
-//       } catch (error) {
-//         console.error("Error fetching molecules:", error);
-//       }
-//     };
-
 //     const fetchManufacturers = async () => {
 //       try {
-//         const response = await api.get('/master/manufacturers');
-//         if (response.data && Array.isArray(response.data.manufacturers)) {
-//           setManufacturers(response.data.manufacturers);
-//         } else {
-//           console.error("Unexpected response format for manufacturers:", response);
-//         }
+//         const response = await api.get("/master/manufacturers");
+//         setManufacturers(response.data.manufacturers || []);
 //       } catch (error) {
 //         console.error("Error fetching manufacturers:", error);
 //       }
 //     };
 
-//     fetchMolecules();
+  
+
 //     fetchManufacturers();
 //   }, []);
 
-//   // Function to generate the API URL based on selected filters
-//   const fetchFilteredProducts = async (updatedFilters) => {
-//     let url = "/master/products/unpublished";
-//     const params = new URLSearchParams();
-
-//     if (updatedFilters.isAssured) params.append("is_assured", updatedFilters.isAssured);
-//     if (updatedFilters.isRefrigerated) params.append("is_refrigerated", updatedFilters.isRefrigerated);
-//     if (updatedFilters.status) params.append("publish_status", updatedFilters.status);
-//     if (updatedFilters.manufacturer) params.append("manufacturer", updatedFilters.manufacturer);
-//     if (updatedFilters.combination) params.append("combination", updatedFilters.combination);
-    
-//     params.append("sort_by", "created,d");
-//     params.append("page", "1");
-
-//     try {
-//       const response = await api.get(`${url}?${params.toString()}`);
-//       console.log("Filtered Products Response:", response.data);
-//     } catch (error) {
-//       console.error("Error fetching filtered products:", error);
-//     }
-//   };
-
-//   // Handle filter changes
-//   const handleFilterChange = (e) => {
-//     const { name, value } = e.target;
+//   // ✅ Handles both native select & react-select changes
+//   const handleFilterChange = (name, value) => {
 //     const newFilters = { ...filters, [name]: value };
 //     setFilters(newFilters);
 //     onFilterChange(newFilters);
-//     fetchFilteredProducts(newFilters); // Fetch products on filter change
+//   };
+
+//   // ✅ Clears an individual filter
+//   const clearFilter = (name) => {
+//     const newFilters = { ...filters, [name]: "" };
+//     setFilters(newFilters);
+//     onFilterChange(newFilters);
+//   };
+
+//   // ✅ Clears all filters at once
+//   const clearAllFilters = () => {
+//     const resetFilters = { isAssured: "", status: "", manufacturer: "" };
+//     setFilters(resetFilters);
+//     onFilterChange(resetFilters);
 //   };
 
 //   return (
 //     <div className="filter-container">
-//       <select name="isAssured" onChange={handleFilterChange} value={filters.isAssured}>
-//         <option value="">Is Assured</option>
-//         <option value="Yes">Yes</option>
-//         <option value="No">No</option>
-//       </select>
-//       <select name="isRefrigerated" onChange={handleFilterChange} value={filters.isRefrigerated}>
-//         <option value="">Is Refrigerated</option>
-//         <option value="Yes">Yes</option>
-//         <option value="No">No</option>
-//       </select>
-//       <select name="status" onChange={handleFilterChange} value={filters.status}>
-//         <option value="">Status</option>
-//         <option value="unpublished">Unpublished</option>
-//         <option value="draft">Draft</option>
-//         <option value="published">Published</option>
-//       </select>
-//       <select name="manufacturer" onChange={handleFilterChange} value={filters.manufacturer}>
-//         <option value="">Manufacturer</option>
-//         {manufacturers.map((manufacturer, idx) => (
-//           <option key={idx} value={manufacturer.id}>{manufacturer.name}</option>
-//         ))}
-//       </select>
-//       <select name="combination" onChange={handleFilterChange} value={filters.combination}>
-//         <option value="">Combination</option>
-//         {molecules.map((molecule, idx) => (
-//           <option key={idx} value={molecule.id}>{molecule.name}</option>
-//         ))}
-//       </select>
+//       {/* ✅ Display Active Filters with Clear Buttons */}
+//       <div className="selected-filters">
+//         {Object.entries(filters).map(([key, value]) =>
+//           value ? (
+//             <span key={key} className="filter-tag">
+//               {key}: {key === "manufacturer"
+//                 ? manufacturers.find((m) => m.id === value)?.name || value
+//                 : value}
+//               <button onClick={() => clearFilter(key)} className="clear-btn">✖</button>
+//             </span>
+//           ) : null
+//         )}
+//       </div>
+
+//       {/* ✅ Filter Select Inputs */}
+//       <div className="filters">
+//         {/* Is Assured Dropdown */}
+//         <select
+//           name="isAssured"
+//           onChange={(e) => handleFilterChange(e.target.name, e.target.value)}
+//           value={filters.isAssured}
+//         >
+//           <option value="">Is Assured</option>
+//           <option value="Yes">Yes</option>
+//           <option value="No">No</option>
+//         </select>
+
+//         {/* Status Filter */}
+//         <select
+//           name="publish_status"
+//           onChange={(e) => handleFilterChange(e.target.name, e.target.value)}
+//           value={filters.status}
+//         >
+//           <option value="">Status</option>
+//           <option value="Unpublished">Unpublished</option>
+//           <option value="Draft">Draft</option>
+//           <option value="Published">Published</option>
+//         </select>
+
+//         {/* ✅ React-Select Manufacturer Dropdown */}
+//         <Select
+//           options={manufacturers.map((m) => ({ value: m.id, label: m.name }))}
+//           onChange={(selectedOption) =>
+//             handleFilterChange("manufacturer", selectedOption ? selectedOption.value : "")
+//           }
+//           isSearchable={true}
+//           value={manufacturers.find((m) => m.id === filters.manufacturer) 
+//                   ? { value: filters.manufacturer, label: manufacturers.find((m) => m.id === filters.manufacturer)?.name } 
+//                   : null}
+//           placeholder="Select Manufacturer"
+//         />
+
+
+//       </div>
+
+//       {/* ✅ Clear All Filters Button */}
+//       <button onClick={clearAllFilters} className="clear-all-btn">Clear All Filters</button>
+
+//       {/* ✅ Styles (Add to your CSS or Tailwind) */}
+//       {/* <style jsx>{`
+//         .filter-container {
+//           display: flex;
+//           flex-direction: column;
+//           gap: 10px;
+//         }
+//         .filters {
+//           display: flex;
+//           gap: 10px;
+//         }
+//         .selected-filters {
+//           display: flex;
+//           gap: 10px;
+//           flex-wrap: wrap;
+//         }
+//         .filter-tag {
+//           background-color: #f0f0f0;
+//           padding: 5px 10px;
+//           border-radius: 5px;
+//           display: flex;
+//           align-items: center;
+//           gap: 5px;
+//         }
+//         .clear-btn {
+//           background: none;
+//           border: none;
+//           color: red;
+//           cursor: pointer;
+//         }
+//         .clear-all-btn {
+//           background-color: red;
+//           color: white;
+//           padding: 8px 12px;
+//           border: none;
+//           cursor: pointer;
+//           border-radius: 5px;
+//         }
+//       `}</style> */}
 //     </div>
 //   );
 // };

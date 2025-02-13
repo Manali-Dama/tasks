@@ -5,7 +5,13 @@ import AddProductForm from '@/app/components/AddProductForm'
 const page = () => {
   return (
     <div>
-        <Breadcrumbs paths={[{ name: "Home", link: "/" }, { name: "Product Master"},{ name: "Add Product"}]} />
+            <Breadcrumbs
+        paths={[
+          { name: "Home", link: "/" },
+          { name: "Product Master", link: "/product-master" },
+          { name: "Add Product" }
+        ]}
+      />
       <AddProductForm />
     </div>
   )
