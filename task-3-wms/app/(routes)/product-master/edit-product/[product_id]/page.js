@@ -1,25 +1,55 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchProductRequest, updateProductRequest } from "@/store/slices/editSlice";
+import api from "@/utils/axiosInstance";
 import CommonForm from "@/app/components/CommonForm";
 import { form_fields, ProductDropdowns } from "@/data/AddProductFormJson";
 
 const EditProductPage = () => {
     const { product_id } = useParams();
-    const dispatch = useDispatch();
-    const { product, loading, error } = useSelector((state) => state.editProduct);
+    const [product, setProduct] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
-        if (product_id) {
-            dispatch(fetchProductRequest(product_id));
-        }
-    }, [product_id, dispatch]);
+        if (!product_id) return;
 
-    const handleSubmit = (formData) => {
-        dispatch(updateProductRequest({ product_id, formData }));
+        const fetchProduct = async () => {
+            try {
+                const response = await api.get(`/master/products/unpublished/${product_id}`, {
+                    headers: { "Location": "1" },
+                });
+
+                if (response.data.code === 200) {
+                    setProduct(response.data.product);
+                } else {
+                    throw new Error(response.data.message);
+                }
+            } catch (err) {
+                setError(err.message || "Failed to fetch product.");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchProduct();
+    }, [product_id]);
+
+    const handleSubmit = async (formData) => {
+        try {
+            const response = await api.put(`/master/products/update/${product_id}`, formData, {
+                headers: { "Location": "1" },
+            });
+
+            if (response.data.code === 200) {
+                alert("Product updated successfully!");
+            } else {
+                throw new Error(response.data.message);
+            }
+        } catch (err) {
+            alert(`Error updating product: ${err.message}`);
+        }
     };
 
     if (loading) return <p>Loading...</p>;
