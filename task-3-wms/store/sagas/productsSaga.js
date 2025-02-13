@@ -1,29 +1,26 @@
 import { takeLatest, call, put, select } from "redux-saga/effects";
 import api from "@/utils/axiosInstance";
-import {
-  fetchProductsStart,
-  fetchProductsSuccess,
-  fetchProductsFailure,
-} from "../slices/productsSlice";
+import { fetchProductsStart, fetchProductsSuccess, fetchProductsFailure } from "../slices/productsSlice";
 
-// Select the current filters from the Redux state
+// Select filters and search from Redux state
 const selectFilters = (state) => state.products.filters;
+const selectSearchField = (state) => state.products.searchField;
+const selectSearchQuery = (state) => state.products.searchQuery;
 
-// API call to fetch products
 const fetchProductsApi = async (url) => {
   const response = await api.get(url);
   return response.data;
 };
 
-// Saga to fetch products based on filters and pagination
 function* fetchProductsSaga(action) {
   try {
     const { page, filters } = action.payload;
-    const currentFilters = yield select(selectFilters); // Get stored filters
+    const currentFilters = yield select(selectFilters);
+    const searchField = yield select(selectSearchField);
+    const searchQuery = yield select(selectSearchQuery);
 
     let query = new URLSearchParams();
 
-    // Merge new filters with existing ones
     const appliedFilters = { ...currentFilters, ...filters };
     Object.keys(appliedFilters).forEach((key) => {
       if (appliedFilters[key]) query.append(key, appliedFilters[key]);
@@ -31,6 +28,10 @@ function* fetchProductsSaga(action) {
 
     query.append("page", page);
     query.append("sort_by", "created,d");
+
+    if (searchField && searchQuery) {
+      query.append("search", `${searchQuery},${searchField}`);
+    }
 
     const url = `/master/products/unpublished?${query.toString()}`;
     const data = yield call(fetchProductsApi, url);
@@ -50,6 +51,62 @@ function* fetchProductsSaga(action) {
 export function* watchFetchProducts() {
   yield takeLatest(fetchProductsStart.type, fetchProductsSaga);
 }
+
+
+
+
+// import { takeLatest, call, put, select } from "redux-saga/effects";
+// import api from "@/utils/axiosInstance";
+// import {
+//   fetchProductsStart,
+//   fetchProductsSuccess,
+//   fetchProductsFailure,
+// } from "../slices/productsSlice";
+
+// // Select the current filters from the Redux state
+// const selectFilters = (state) => state.products.filters;
+
+// // API call to fetch products
+// const fetchProductsApi = async (url) => {
+//   const response = await api.get(url);
+//   return response.data;
+// };
+
+// // Saga to fetch products based on filters and pagination
+// function* fetchProductsSaga(action) {
+//   try {
+//     const { page, filters } = action.payload;
+//     const currentFilters = yield select(selectFilters); // Get stored filters
+
+//     let query = new URLSearchParams();
+
+//     // Merge new filters with existing ones
+//     const appliedFilters = { ...currentFilters, ...filters };
+//     Object.keys(appliedFilters).forEach((key) => {
+//       if (appliedFilters[key]) query.append(key, appliedFilters[key]);
+//     });
+
+//     query.append("page", page);
+//     query.append("sort_by", "created,d");
+
+//     const url = `/master/products/unpublished?${query.toString()}`;
+//     const data = yield call(fetchProductsApi, url);
+
+//     yield put(
+//       fetchProductsSuccess({
+//         products: data.products,
+//         current_page: data.meta.current_page,
+//         last_page: data.meta.last_page,
+//       })
+//     );
+//   } catch (error) {
+//     yield put(fetchProductsFailure(error.message));
+//   }
+// }
+
+// export function* watchFetchProducts() {
+//   yield takeLatest(fetchProductsStart.type, fetchProductsSaga);
+// }
 
 
 

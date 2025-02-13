@@ -8,7 +8,7 @@ const Filter = ({ onFilterChange }) => {
     isRefrigerated: "",
     publish_status: "",
     manufacturer: "",
-    combination: [], // ✅ Fixed key name
+    combination: [], 
   });
 
   const [manufacturers, setManufacturers] = useState([]);
@@ -37,21 +37,20 @@ const Filter = ({ onFilterChange }) => {
     fetchMolecules();
   }, []);
 
-  // ✅ Handles both single and multi-select changes
+
   const handleFilterChange = (name, value) => {
     const newFilters = { ...filters, [name]: value };
     setFilters(newFilters);
     onFilterChange(newFilters);
   };
 
-  // ✅ Clears an individual filter
+
   const clearFilter = (name) => {
     const newFilters = { ...filters, [name]: name === "combination" ? [] : "" };
     setFilters(newFilters);
     onFilterChange(newFilters);
   };
 
-  // ✅ Clears all filters at once
   const clearAllFilters = () => {
     const resetFilters = {
       isAssured: "",
@@ -66,7 +65,7 @@ const Filter = ({ onFilterChange }) => {
 
   return (
     <div className="filter-container">
-      {/* ✅ Display Active Filters with Clear Buttons */}
+    
       <div className="selected-filters">
         {filters.isAssured && (
           <span className="filter-tag">
@@ -94,9 +93,8 @@ const Filter = ({ onFilterChange }) => {
         )}
       </div>
 
-      {/* ✅ Filter Select Inputs */}
       <div className="filters">
-        {/* Is Assured Dropdown */}
+
         <select
           name="isAssured"
           onChange={(e) => handleFilterChange(e.target.name, e.target.value)}
@@ -107,7 +105,6 @@ const Filter = ({ onFilterChange }) => {
           <option value="No">No</option>
         </select>
 
-        {/* Status Filter */}
         <select
           name="publish_status"
           onChange={(e) => handleFilterChange(e.target.name, e.target.value)}
@@ -119,7 +116,6 @@ const Filter = ({ onFilterChange }) => {
           <option value="Published">Published</option>
         </select>
 
-        {/* ✅ Manufacturer Dropdown */}
         <Select
           options={manufacturers.map((m) => ({ value: m.id, label: m.name }))}
           onChange={(selectedOption) =>
@@ -132,7 +128,7 @@ const Filter = ({ onFilterChange }) => {
           placeholder="Select Manufacturer"
         />
 
-        {/* ✅ Multi-Select Molecule Dropdown */}
+
         <Select
           options={molecules.map((m) => ({ value: m.id, label: m.name }))}
           onChange={(selectedOptions) =>
@@ -150,10 +146,10 @@ const Filter = ({ onFilterChange }) => {
         />
       </div>
 
-      {/* ✅ Clear All Filters Button */}
+
       <button onClick={clearAllFilters} className="clear-all-btn">Clear All Filters</button>
 
-      {/* ✅ Styles (Add to your CSS or Tailwind) */}
+
     </div>
   );
 };
