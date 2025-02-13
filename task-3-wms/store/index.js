@@ -5,6 +5,7 @@ import dropdownReducer from "./slices/dropdownSlice";
 import productsReducer from './slices/productsSlice';
 import addReducer from "./slices/addSlice";
 import rootSaga from './sagas/rootSaga';
+import editReducer from './slices/editSlice'
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -13,7 +14,8 @@ const store = configureStore({
     login: loginReducer,
     products: productsReducer,
     dropdowns: dropdownReducer,
-    addProduct: addReducer
+    addProduct: addReducer,
+    editProduct: editReducer, 
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(sagaMiddleware),
 });

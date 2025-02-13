@@ -96,6 +96,7 @@ const AddProductForm = () => {
       mis_warehouse_category: formData.mis_warehouse_category || "",
     };
 
+    
     dispatch({ type: "addProduct", payload: formattedData });
   };
 
