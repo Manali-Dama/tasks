@@ -5,7 +5,9 @@ import { addProductRequest, addProductSuccess, addProductFailure } from "../slic
 function* addProductSaga(action) {
   try {
     yield put(addProductRequest());
-    yield call(api.post, "master/products", action.payload);
+    yield call(api.post, "master/products", action.payload, {
+      headers: { Location: "1" }
+    });
     yield put(addProductSuccess());
   } catch (error) {
     yield put(addProductFailure(error.message));

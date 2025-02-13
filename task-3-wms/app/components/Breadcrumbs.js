@@ -5,9 +5,9 @@ import Link from "next/link";
 export const Breadcrumbs = ({ paths }) => {
   return (
     <nav aria-label="breadcrumb">
-      <ol className="breadcrumb flex items-center space-x-2">
+      <ol className="breadcrumb flex items-center space-x-2 px-8 py-3">
         {paths.map((path, index) => (
-          <li key={index} className="breadcrumb-item flex items-center">
+          <li key={index} className="breadcrumb-item">
             {index === 0 ? (
               // Home icon with navigation
               <Link href={path.link}>

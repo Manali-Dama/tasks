@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import React, { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -40,69 +40,62 @@ const AddProductForm = () => {
       ...section,
       fields: section.fields.map((field) =>
         field.type === "dropdown"
-          ? { ...field, options: transformedDropdowns[field.field_key] || [] }
+          ? { ...field, options: transformedDropdowns[field.options] || [] }
           : field
       ),
     })),
   };
 
+  const parseBoolean = (value) => value === true || value === "true";
+  const parseNumber = (value) => (isNaN(value) ? null : Number(value));
+
   const handleSubmit = (formData) => {
-    // Transform formData to match the desired product structure
+    const returnType = formData.product_return_type || "";
+    const returnDetails = dropdowns?.product_return_details?.[returnType] || {};
+
     const formattedData = {
-      product_type: formData.product_type,
-      is_active: formData.is_active,
+      product_type: formData.product_type || "",
+      is_active: parseBoolean(formData.is_active),
       transaction_units: {
-        purchase_unit: formData.purchase_unit,
-        sales_unit: formData.sales_unit,
-        transfer_unit: formData.transfer_unit,
+        purchase_unit: parseNumber(formData.purchase_unit),
+        sales_unit: parseNumber(formData.sales_unit),
+        transfer_unit: parseNumber(formData.transfer_unit),
       },
-      is_discontinued: formData.is_discontinued,
-      scheduled_type_code: formData.scheduled_type_code,
-      product_name: formData.product_name,
-      manufacturer: {
-        id: formData.manufacturer_id,
-        name: formData.manufacturer_name,
-      },
-      mrp: formData.mrp,
+      is_discontinued: parseBoolean(formData.is_discontinued),
+      scheduled_type_code: formData.scheduled_type_code || "",
+      product_name: formData.product_name || "",
+      manufacturer: formData.manufacturers || "",
       packaging_units: {
-        dosage_form: formData.dosage_form,
-        package_type: formData.package_type,
-        uom: formData.uom,
-        package_size: formData.package_size,
+        dosage_form: formData.dosage_form || "",
+        package_type: formData.package_type || "",
+        uom: formData.uom || "",
+        package_size: parseNumber(formData.package_size),
       },
       combination: {
-        molecules: formData.molecules,
+        molecules: Array.isArray(formData.molecules) ? formData.molecules : [],
       },
-      is_refrigerated: formData.is_refrigerated,
-      can_sell_online: formData.can_sell_online,
-      is_chronic: formData.is_chronic,
-      is_rx_required: formData.is_rx_required,
-      is_assured: formData.is_assured,
-      is_banned: formData.is_banned,
-      is_hidden_from_alternate_products: formData.is_hidden_from_alternate_products,
+      is_refrigerated: parseBoolean(formData.is_refrigerated),
+      can_sell_online: parseBoolean(formData.can_sell_online),
+      is_chronic: parseBoolean(formData.is_chronic),
+      is_rx_required: parseBoolean(formData.is_rx_required),
+      is_assured: parseBoolean(formData.is_assured),
+      is_banned: parseBoolean(formData.is_banned),
+      is_hidden_from_alternate_products: parseBoolean(formData.is_hidden_from_alternate_products),
       taxes: {
-        gst_type: formData.gst_type,
-        hsn_code: formData.hsn_code,
+        gst_type: formData.gst_type || "",
+        hsn_code: formData.hsn_code || "",
       },
       sales_category: {
-        b2b_category: formData.b2b_category,
-        sales_trend_category: formData.sales_trend_category,
-        b2c_category: formData.b2c_category,
-        return_type: formData.return_type,
-        purchase: formData.purchase,
-        purchase_return: formData.purchase_return,
-        transfer_out: formData.transfer_out,
-        transfer_in: formData.transfer_in,
-        franchise_out: formData.franchise_out,
-        franchise_in: formData.franchise_in,
-        b2c_out: formData.b2c_out,
-        b2c_in: formData.b2c_in,
+        b2b_category: formData.b2b_category || "",
+        sales_trend_category: formData.sales_trend_category || "",
+        b2c_category: formData.b2c_category || "",
+        return_type: returnType,
+        ...returnDetails,
       },
-      mis_reporting_category: formData.mis_reporting_category,
-      mis_warehouse_category: formData.mis_warehouse_category,
+      mis_reporting_category: formData.mis_reporting_category || "",
+      mis_warehouse_category: formData.mis_warehouse_category || "",
     };
 
-    // Dispatch the formatted data
     dispatch({ type: "addProduct", payload: formattedData });
   };
 
@@ -110,6 +103,115 @@ const AddProductForm = () => {
 };
 
 export default AddProductForm;
+
+
+
+
+// "use client";
+
+// import React, { useEffect, useMemo } from "react";
+// import { useDispatch, useSelector } from "react-redux";
+// import CommonForm from "./CommonForm";
+// import { fetchDropdownsRequest } from "@/store/slices/dropdownSlice";
+// import { form_fields as baseFormFields } from "@/data/AddProductFormJson";
+// import "@/app/styles/AddProduct.css";
+
+// const AddProductForm = () => {
+//   const dispatch = useDispatch();
+//   const dropdowns = useSelector((state) => state.dropdowns.dropdowns);
+
+//   useEffect(() => {
+//     dispatch(fetchDropdownsRequest());
+//   }, [dispatch]);
+
+//   const transformDropdownOptions = (key) => {
+//     const items = dropdowns?.[key];
+//     if (!Array.isArray(items)) {
+//       console.warn(`Expected an array for key '${key}', but got:`, items);
+//       return [];
+//     }
+//     return items.map((item) => ({
+//       field_key: item,
+//       label: item,
+//     }));
+//   };
+
+//   const transformedDropdowns = useMemo(() => {
+//     return Object.keys(dropdowns || {}).reduce((acc, key) => {
+//       acc[key] = transformDropdownOptions(key);
+//       return acc;
+//     }, {});
+//   }, [dropdowns]);
+
+//   const form_fields = {
+//     ...baseFormFields,
+//     sections: baseFormFields.sections.map((section) => ({
+//       ...section,
+//       fields: section.fields.map((field) =>
+//         field.type === "dropdown"
+//           ? { ...field, options: transformedDropdowns[field.options] || [] }
+//           : field
+//       ),
+//     })),
+//   };
+
+//   const handleSubmit = (formData) => {
+//     const returnType = formData.product_return_type;
+//     const returnDetails = dropdowns?.product_return_details?.[returnType] || {};
+  
+//     const formattedData = {
+//       product_type: formData.product_type,
+//       is_active: formData.is_active,
+//       transaction_units: {
+//         purchase_unit: formData.purchase_unit,
+//         sales_unit: formData.sales_unit,
+//         transfer_unit: formData.transfer_unit,
+//       },
+//       is_discontinued: formData.is_discontinued,
+//       scheduled_type_code: formData.scheduled_type_code,
+//       product_name: formData.product_name,
+//       manufacturer: formData.manufacturers,
+//       packaging_units: {
+//         dosage_form: formData.dosage_form,
+//         package_type: formData.package_type,
+//         uom: formData.uom,
+//         package_size: formData.package_size,
+//       },
+//       combination: {
+//         molecules: formData.molecules,
+//       },
+//       is_refrigerated: formData.is_refrigerated,
+//       can_sell_online: formData.can_sell_online,
+//       is_chronic: formData.is_chronic,
+//       is_rx_required: formData.is_rx_required,
+//       is_assured: formData.is_assured,
+//       is_banned: formData.is_banned,
+//       is_hidden_from_alternate_products: formData.is_hidden_from_alternate_products,
+//       taxes: {
+//         gst_type: formData.gst_type,
+//         hsn_code: formData.hsn_code,
+//       },
+//       sales_category: {
+//         b2b_category: formData.b2b_category,
+//         sales_trend_category: formData.sales_trend_category,
+//         b2c_category: formData.b2c_category,
+//         product_return_type: returnType,
+//         ...returnDetails, // Include return type details dynamically
+//       },
+//       mis_reporting_category: formData.mis_reporting_category,
+//       mis_warehouse_category: formData.mis_warehouse_category,
+//     };
+  
+//     dispatch({ type: "addProduct", payload: formattedData });
+//   };
+  
+
+//   return <CommonForm title="Add Product" formFields={form_fields} onSubmit={handleSubmit} />;
+// };
+
+// export default AddProductForm;
+
+
 
 
 

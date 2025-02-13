@@ -71,7 +71,7 @@ const ProductMaster = () => {
         />
         <Button onClick={() => router.push("/product-master/add-product")}>+ Add</Button>
       </div>
-      <div className="p-10">
+      <div>
         <div className="bg-[#fff] p-4">
           <p className="px-4">Unpublished products</p>
           <Search

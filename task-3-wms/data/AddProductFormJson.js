@@ -1,16 +1,16 @@
-// export const ProductDropdowns = {
-//     product_type: [],
-//     dosage_form: [],
-//     package_type: [],
-//     uom: [],
-//     schedule_type_code: [],
-//     gst_type: [],
-//     b2b_category: [],
-//     sales_trend_category: [],
-//     product_return_type: [],
-//     mis_reporting_category: [],
-//     mis_warehouse_category: []
-// };
+export const ProductDropdowns = {
+    product_type: [],
+    dosage_form: [],
+    package_type: [],
+    uom: [],
+    schedule_type_code: [],
+    gst_type: [],
+    b2b_category: [],
+    sales_trend_category: [],
+    product_return_type: [],
+    mis_reporting_category: [],
+    mis_warehouse_category: []
+};
 
 export const form_fields = {
     sections: [
@@ -40,6 +40,8 @@ export const form_fields = {
                     type: "dropdown",
                     label: "Product Type",
                     field_key: "product_type",
+                    options: "product_type",
+                    default:"Goods",
                     required: true
                 },
                 {
@@ -81,18 +83,21 @@ export const form_fields = {
                             type: "dropdown",
                             label: "Dosage Form",
                             field_key: "dosage_form",
+                            options: "dosage_form",
                             required: true
                         },
                         {
                             type: "dropdown",
                             label: "Package type",
                             field_key: "package_type",
+                            options: "package_type",
                             required: true
                         },
                         {
                             type: "dropdown",
                             label: "Unit of Measurement",
                             field_key: "uom",
+                            options: "uom",
                             required: true
                         },
                         {
@@ -108,15 +113,16 @@ export const form_fields = {
                     title: "Molecule Composition",
                     fields: [
                         {
-                            type: "dropdown",
+                            type: "search-dropdown",
                             label: "Molecules",
+                            field_key: "molecules",
                             options: "molecules",
                             required: false
                         }
                     ]
                 },
                 {
-                    type: "section",
+                    type: "services",
                     title: "Classification",
                     fields: [
                         {
@@ -215,13 +221,14 @@ export const form_fields = {
                     ]
                 },
                 {
-                    type: "section",
+                    type: "services",
                     "title": "GST Info",
                     "fields": [
                         {
                             type: "dropdown",
                             label: "GST Type",
                             field_key: "gst_type",
+                            options: "gst_type",
                             required: true
                         },
                         {
@@ -240,10 +247,11 @@ export const form_fields = {
                             type: "dropdown",
                             label: "B2B Product type",
                             field_key: "b2b_category",
+                            options: "b2b_category",
                             required: true
                         },
                         {
-                            type: "dropdown",
+                            type: "search-dropdown",
                             label: "B2C Product type",
                             field_key: "b2c_category",
                             required: false
@@ -252,30 +260,34 @@ export const form_fields = {
                             type: "dropdown",
                             label: "Sales Trend Category",
                             field_key: "sales_trend_category",
+                            options: "sales_trend_category",
                             required: true
                         },
                         {
                             type: "dropdown",
                             label: "Return Type",
                             field_key: "product_return_type",
+                            options:"product_return_type",
                             required: true
                         }
                     ]
                 },
                 {
-                    type: "section",
+                    type: "services",
                     "title": "MIS Category",
                     "fields": [
                         {
                             type: "dropdown",
                             label: "Reporting Category",
                             field_key: "mis_reporting_category",
+                            options: "mis_reporting_category",
                             required: true
                         },
                         {
                             type: "dropdown",
                             label: "WH Category",
                             field_key: "mis_warehouse_category",
+                            options: "mis_warehouse_category",
                             required: true
                         }
                     ]

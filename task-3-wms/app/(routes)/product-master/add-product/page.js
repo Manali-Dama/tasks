@@ -9,7 +9,7 @@ const page = () => {
         paths={[
           { name: "Home", link: "/" },
           { name: "Product Master", link: "/product-master" },
-          { name: "Add Product" }
+          { name: "Add Product", link:"/product-master/add-product" }
         ]}
       />
       <AddProductForm />
