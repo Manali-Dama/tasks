@@ -11,6 +11,7 @@ import {
 
 function* fetchProductSaga(action) {
     try {
+        console.log("fetch request ", action.payload)
         const response = yield call(api.get, `/master/products/unpublished/${action.payload}`, {
             headers: { "Location": "1" },
         });
