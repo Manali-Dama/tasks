@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProductRequest, updateProductRequest } from "@/store/slices/editSlice";
 import { useParams } from "next/navigation";
-import { form_fields } from "@/data/AddProductFormJson"; // Ensure this includes field_key for dropdowns
+import { form_fields } from "@/data/AddProductFormJson";
 import CommonForm from "@/app/components/CommonForm";
 import { fetchDropdownsRequest } from "@/store/slices/dropdownSlice";
 
