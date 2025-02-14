@@ -11,39 +11,54 @@ import {
 
 function* fetchProductSaga(action) {
     try {
-        console.log("fetch request ", action.payload)
-        const response = yield call(api.get, `/master/products/unpublished/${action.payload}`, {
-            headers: { "Location": "1" },
+        const productId = action.payload;
+        if (!productId) throw new Error("Invalid product ID");
+
+        console.log("Fetching product ID:", productId);
+        const response = yield call(api.get, `/master/products/unpublished/${productId}`, {
+            headers: { Location: "1" },
         });
 
-        if (response.data.code === 200) {
+        if (response.data?.code === 200) {
             yield put(fetchProductSuccess(response.data.product));
         } else {
-            throw new Error(response.data.message);
+            throw new Error(response.data?.message || "Failed to fetch product.");
         }
     } catch (error) {
+        console.error("Fetch product error:", error);
         yield put(fetchProductFailure(error.message || "Failed to fetch product."));
     }
 }
 
 function* updateProductSaga(action) {
     try {
-        const { product_id, formData } = action.payload;
-        const response = yield call(api.put, `/master/products/update/${product_id}`, formData, {
-            headers: { "Location": "1" },
+        const { product_id, finalData } = action.payload;
+
+        if (!product_id) {
+            throw new Error("Missing product ID for update");
+        }
+
+        console.log("Updating product ID:", product_id, "with data:", finalData);
+
+        const response = yield call(api.put, `/master/products/${product_id}`, finalData, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+                Location: "1",
+            },
         });
 
-        if (response.data.code === 200) {
+        if (response.data?.code === 200) {
             yield put(updateProductSuccess());
-            alert("Product updated successfully!");
+            console.log("Product updated successfully!");
         } else {
-            throw new Error(response.data.message);
+            throw new Error(response.data?.message || "Failed to update product.");
         }
     } catch (error) {
+        console.error("Update product error:", error);
         yield put(updateProductFailure(error.message || "Failed to update product."));
-        alert(`Error updating product: ${error.message}`);
     }
 }
+
 
 export function* watchEditProductSaga() {
     yield takeLatest(fetchProductRequest.type, fetchProductSaga);

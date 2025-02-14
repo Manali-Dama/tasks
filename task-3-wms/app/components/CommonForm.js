@@ -5,6 +5,7 @@ import "@/app/styles/AddProduct.css";
 import { useSelector } from "react-redux";
 import SearchDropdown from "./SearchDropdown";
 
+
 const CommonForm = ({ title, formFields, onSubmit, initialData = {} }) => {
   const [activeSection, setActiveSection] = useState(
     formFields.sections.find((section) => section.title === "variable")?.fields[0]?.title || ""
@@ -15,9 +16,9 @@ const CommonForm = ({ title, formFields, onSubmit, initialData = {} }) => {
   const productReturnOptions = dropdowns?.product_return_type || [];
   const productReturnDetails = dropdowns?.product_return_details || {};
 
-  useEffect(() => {
-    setFormData(initialData);
-  }, [initialData]);
+  // useEffect(() => {
+  //   setFormData(initialData);
+  // }, [initialData]);
 
   const handleInputChange = (e, field) => {
     const value = e && e.target ? (field.type === "boolean" ? e.target.checked : e.target.value) : e;
