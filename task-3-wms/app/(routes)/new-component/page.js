@@ -1,5 +1,5 @@
 import React from 'react'
-import NewComponent from '@/app/components/NewComponent';
+import DynamicSelectInput from '@/app/components/NewComponent'
 
 const page = () => {
     const Data = {
@@ -13,7 +13,7 @@ const page = () => {
       };
     return (
       <div>
-       <NewComponent Data={Data} />
+       <DynamicSelectInput />
        </div>
     )
 }

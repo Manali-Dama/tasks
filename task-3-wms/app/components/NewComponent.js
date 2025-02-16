@@ -1,65 +1,44 @@
-"use client";
+"use client"
 
-import { useState, useEffect } from "react";
+import React, { useState } from "react";
 
-const NewComponent = ({ Data }) => {
-  const data = Data.data;
-  const [options, setOptions] = useState([]);
-  const [selectedKey, setSelectedKey] = useState(null);
-  const [inputValues, setInputValues] = useState([]);
+const config = [
+  { id: 1, label: "Category", options: ["Electronics", "Clothing", "Books"] },
+  { id: 2, label: "Brand", options: ["Apple", "Samsung", "Sony"] },
+  { id: 3, label: "Color", options: ["Red", "Blue", "Green"] }
+];
 
-  useEffect(() => {
-    const extractedOptions = data.map((item) => parseInt(item.field_key));
-    setOptions(extractedOptions);
-  }, [data]);
+const DynamicSelectInput = () => {
+  const [selectedValues, setSelectedValues] = useState(
+    config.reduce((acc, item) => ({ ...acc, [item.id]: "" }), {})
+  );
 
-  const handleSelectChange = (event) => {
-    const selected = parseInt(event.target.value);
-    setSelectedKey(selected || null);
-
-    if (!selected) {
-      setInputValues([]); 
-      return;
-    }
-
-    const selectedValues = data.slice(0, selected).map((item) => item.value || "");
-    setInputValues(selectedValues);
+  const handleChange = (id, value) => {
+    setSelectedValues((prev) => ({ ...prev, [id]: value }));
   };
 
-
   return (
-    <div className="p-4 flex flex-col gap-4">
-      <select
-        className="border p-2 rounded"
-        value={selectedKey || ""}
-        onChange={handleSelectChange}
-      >
-        <option value="">Select a key</option>
-        {options.map((option, index) => (
-          <option key={index} value={option}>
-            {option}
-          </option>
-        ))}
-      </select>
-
-      {inputValues.length > 0 && (
-        <div className="flex flex-col gap-2">
-          {inputValues.map((value, index) => (
-            <input
-              key={index}
-              type="text"
-              className="border p-2 rounded"
-              value={value}
-              readOnly
-            />
-          ))}
+    <div>
+      {config.map(({ id, label, options }) => (
+        <div key={id} style={{ marginBottom: "10px" }}>
+          <label>{label}: </label>
+          <select onChange={(e) => handleChange(id, e.target.value)}>
+            <option value="">Select {label}</option>
+            {options.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+          <input type="text" value={selectedValues[id]} readOnly />
         </div>
-      )}
+      ))}
     </div>
   );
 };
 
-export default NewComponent;
+export default DynamicSelectInput;
+
 
 
 
