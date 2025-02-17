@@ -1,26 +1,29 @@
 "use client"
 
-import React, { useState } from "react";
+"use client";
 
-const config = [
-  { id: 1, label: "Category", options: ["Electronics", "Clothing", "Books"] },
-  { id: 2, label: "Brand", options: ["Apple", "Samsung", "Sony"] },
-  { id: 3, label: "Color", options: ["Red", "Blue", "Green"] }
-];
+import React, { useState, useEffect } from "react";
 
-const DynamicSelectInput = () => {
-  const [selectedValues, setSelectedValues] = useState(
-    config.reduce((acc, item) => ({ ...acc, [item.id]: "" }), {})
-  );
+const DynamicSelectInput = ({ data }) => {
+  const [selectedValues, setSelectedValues] = useState("");
+  console.log(selectedValues)
+ 
 
+  useEffect(() => {
+    setSelectedValues(...data);
+    console.log("data",data)
+  }, [data]);
+  console.log(selectedValues)
   const handleChange = (id, value) => {
     setSelectedValues((prev) => ({ ...prev, [id]: value }));
+    console.log("(id ,value ) : " , id,value)
   };
-
+  
   return (
     <div>
-      {config.map(({ id, label, options }) => (
-        <div key={id} style={{ marginBottom: "10px" }}>
+      {data.map(({ id, label, options }) => (
+       
+        <div key={id} className="m-10">
           <label>{label}: </label>
           <select onChange={(e) => handleChange(id, e.target.value)}>
             <option value="">Select {label}</option>
@@ -30,7 +33,7 @@ const DynamicSelectInput = () => {
               </option>
             ))}
           </select>
-          <input type="text" value={selectedValues[id]} readOnly />
+          <input className="m-3" type="text" value={selectedValues[id] || ""} readOnly />
         </div>
       ))}
     </div>

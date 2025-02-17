@@ -2,18 +2,17 @@ import React from 'react'
 import DynamicSelectInput from '@/app/components/NewComponent'
 
 const page = () => {
-    const Data = {
-        data: [
-          { field_key: 1, value: "value1" },
-          { field_key: 2, value: "value2" },
-          { field_key: 3, value: "value3" },
-          { field_key: 4, value: "value4" },
-          { field_key: 5, value: "value5" },
-        ]
-      };
+const config = [
+  { id: 1, label: "Category", options: ["Published", "Unpublished", "Draft"] },
+  { id: 2, label: "is Refrigerated", options: ["yes", "no"] },
+  { id: 3, label: "is Assured", options: ["yes", "no"] },
+  { id: 4, label: "manufacturer", options: ["manufacturer1", "manufacturer2", "manufacturer3"] },
+  { id: 5, label: "molecules", options: ["molecule1", "molecule2", "molecule3"] }
+];
+
     return (
       <div>
-       <DynamicSelectInput />
+       <DynamicSelectInput data={config} />
        </div>
     )
 }
