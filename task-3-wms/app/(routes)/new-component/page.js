@@ -1,21 +1,52 @@
-import React from 'react'
-import DynamicSelectInput from '@/app/components/NewComponent'
+"use client";
 
-const page = () => {
-const config = [
-  { id: 1, label: "Category", options: ["Published", "Unpublished", "Draft"] },
-  { id: 2, label: "is Refrigerated", options: ["yes", "no"] },
-  { id: 3, label: "is Assured", options: ["yes", "no"] },
-  { id: 4, label: "manufacturer", options: ["manufacturer1", "manufacturer2", "manufacturer3"] },
-  { id: 5, label: "molecules", options: ["molecule1", "molecule2", "molecule3"] }
-];
+import React from "react";
+import DynamicSelectInput from "@/app/components/NewComponent";
 
-    return (
-      <div>
-       <DynamicSelectInput data={config} />
-       </div>
-    )
-}
+const Page = () => {
+  const config = [
+    {
+      id: 1,
+      label: "Category",
+      options: ["Published", "Unpublished", "Draft"],
+      selectPosition: { x: "50px", y: "100px" },
+      inputPosition: { x: "200px", y: "400px" },
+    },
+    {
+      id: 2,
+      label: "is Refrigerated",
+      options: ["yes", "no"],
+      selectPosition: { x: "50px", y: "200px" },
+      inputPosition: { x: "200px", y: "200px" },
+    },
+    {
+      id: 3,
+      label: "is Assured",
+      options: ["yes", "no"],
+      selectPosition: { x: "50px", y: "300px" },
+      inputPosition: { x: "200px", y: "300px" },
+    },
+    {
+      id: 4,
+      label: "Manufacturer",
+      options: ["Manufacturer 1", "Manufacturer 2", "Manufacturer 3"],
+      selectPosition: { x: "500px", y: "30px" },
+      inputPosition: { x: "200px", y: "500px" },
+    },
+    {
+      id: 5,
+      label: "Molecules",
+      options: ["molecule 1", "molecule 2" , "molecule 3"],
+      selectPosition: { x: "700px", y: "300px" },
+      inputPosition: { x: "600px", y: "500px" },
+    },
+  ];
 
-export default page
+  return (
+    <div>
+      <DynamicSelectInput data={config} />
+    </div>
+  );
+};
 
+export default Page;
