@@ -8,7 +8,7 @@ const Select = ({ id, label, options, value, onChange, className }) => {
       id={id}
       value={value}
       onChange={onChange}
-      className={`border border-black rounded p-2 ${className}`}
+      className={`border border-black rounded p-2 font-sans ${className}`}
     >
       <option value="">Select {label}</option>
       {options.map((option) => (

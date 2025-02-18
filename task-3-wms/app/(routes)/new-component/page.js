@@ -1,50 +1,78 @@
 "use client";
 
 import React from "react";
-import DynamicSelectInput from "@/app/components/NewComponent";
+import DynamicForm from "@/app/components/NewComponent";
+import { number, string } from "prop-types";
 
 const Page = () => {
   const config = [
     {
       id: 1,
-      label: "Category",
-      options: ["Published", "Unpublished", "Draft"],
-      selectPosition: { x: "50px", y: "100px" },
-      inputPosition: { x: "200px", y: "400px" },
+      fieldType: "input",
+      label: "Product Name*",
+      fieldKey: "product_name",
+      input_type: "string" ,
+      required: true
     },
     {
       id: 2,
-      label: "is Refrigerated",
-      options: ["yes", "no"],
-      selectPosition: { x: "50px", y: "200px" },
-      inputPosition: { x: "200px", y: "200px" },
+      fieldType: "select",
+      label: "Product Type*",
+      fieldKey: "product_type",
+      required: true
     },
     {
       id: 3,
-      label: "is Assured",
-      options: ["yes", "no"],
-      selectPosition: { x: "50px", y: "300px" },
-      inputPosition: { x: "200px", y: "300px" },
+      fieldType: "input",
+      label: "Wondersoft Code",
+      fieldKey: "ws_code",
+      disable: true
     },
     {
       id: 4,
-      label: "Manufacturer",
-      options: ["Manufacturer 1", "Manufacturer 2", "Manufacturer 3"],
-      selectPosition: { x: "500px", y: "30px" },
-      inputPosition: { x: "200px", y: "500px" },
+      fieldType: "input",
+      label: "Product Code",
+      fieldKey: "product_code",
+      disable: true
     },
     {
       id: 5,
-      label: "Molecules",
-      options: ["molecule 1", "molecule 2" , "molecule 3"],
-      selectPosition: { x: "700px", y: "300px" },
-      inputPosition: { x: "600px", y: "500px" },
+      fieldType: "select",
+      label: "Manufacturer*",
+      fieldKey: "manufacturers",
+      required: true
+    },
+
+    {
+      id: 6,
+      fieldType: "input",
+      label: "MRP*",
+      fieldKey: "mrp",
+      required: true,
+      input_type: "number"
     },
   ];
 
+  const Options = {
+    dosage: [
+      { value: "low", label: "Low" },
+      { value: "medium", label: "Medium" },
+      { value: "high", label: "High" },
+    ],
+    product_type: [
+      { value: "Goods", label: "Goods"},
+      { value: "Services", label: "Services" },
+    ],
+    manufacturers: [
+      { value: "Manufacturer 1", label: "manufacturer_1" },
+      { value: "Manufacturer 2", label: "manufacturer2" },
+      { value: "Manufacturer 3", label: "manufacturer3" },
+    ],
+  };
+
   return (
     <div>
-      <DynamicSelectInput data={config} />
+      <DynamicForm config={config} Options={Options} />
     </div>
   );
 };

@@ -14,14 +14,13 @@ export default function RootLayout({ children }) {
 
   return (
 
-    <Provider store={store}>
+  
       <html lang="en">
        
         <body>  
-        <Navbar />
+        {/* <Navbar /> */}
           {children} {/* Render the children (the page content) */}
         </body>
       </html>
-    </Provider>
   );
 }

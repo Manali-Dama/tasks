@@ -2,14 +2,16 @@
 
 import React from "react";
 
-const Input = ({ value, readOnly, className }) => {
+const Input = ({ value, readOnly, className ,onChange,placeholder }) => {
   return (
     <input
       type="text"
       value={value}
       readOnly={readOnly}
-      className={`border border-red-500 rounded p-2 w-64 ${className}`}
-    />
+      onChange={onChange}
+      placeholder={placeholder}
+      className={`border rounded p-2 font-sans ${className}`}
+    /> 
   );
 };
 
